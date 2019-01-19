@@ -16,14 +16,19 @@
         </style>
     </head>
 <body>
-
+    <!-- <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4">Fluid jumbotron</h1>
+            <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
+        </div>
+    </div> -->
     <?php
         echo "<html><body><table>\n\n";
-        $f = fopen("test.csv", "r");
+        $f = fopen("‎⁨Macintosh HD⁩/Users⁩/Adam⁩/Desktop⁩/ind_projects⁩/honda⁩/honda-mobility-hacks⁩/scoredData.csv", "r");
         while (($line = fgetcsv($f)) !== false) {
             echo "<tr>";
             $counter_int = 0;
-            $num_cols = 3;
+            $num_cols = 6;
             foreach ($line as $cell) {
                 if ($counter_int == 0) {
                     if (htmlspecialchars($cell) == '1') {
