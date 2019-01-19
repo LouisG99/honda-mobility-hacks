@@ -38,6 +38,10 @@ for(i in 1:632863){
 ```
 
 ```{r}
-data[c(vector),]
+data = data[348843:373384,]
+```
+
+```{r}
+write.csv(data, 'usable_data.csv')
 ```
 
