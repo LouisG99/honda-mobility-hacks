@@ -18,10 +18,12 @@ class radarCar:
         self.speed = 0
         self.time = time
         self.dt = dt
-        self.nearCarsDist = [] # size 64
+        self.nearCarsDist = [None] * 64 # size 64
                 # should be array of array such that 
                 # index is like [obj_nbr][time_index]
-        self.nearCarsAngle = [] # size 64
+        self.nearCarsAngle = [None] * 64  # size 64
+        self.nearCarsSpeed = [ [None] ] * 64  # size 64, each inner array size-1 of dist
+        self.carsScore = [ [None] ] * 64  # size 64
         self.meanSpeed = 0
         self.stdevSpeed = 0
         self.time_Index = 0
@@ -34,61 +36,56 @@ class radarCar:
         
         total_d = (horiz_d**2 + vertical_d**2)**0.5
         return total_d / self.dt
+    
 
-    def getAverageSpeed(self):
+    def updateAverageSpeed(self):
         speedSum = 0
         count = 0
         for i in range(len(self.nearCarsAngle)-1):
             dist_0 = self.nearCarsDist[i][self.time_index]
-            dist_1 = self.nearCarsDist[i+1][self.time_index]
+            dist_1 = self.nearCarsDist[i][self.time_index+1]
             if dist_0==0 or dist_1==0: 
-                break
+                speed = "NO"
             else:
                 angle_0 = self.nearCarsAngle[i][self.time_index]
-                angle_1 = self.nearCarsAngle[i+1][self.time_index]
+                angle_1 = self.nearCarsAngle[i][self.time_index+1]
                 
                 speed = self.getSpeed(dist_0, dist_1, angle_0, angle_1)
                 if speed > 8.9: # 20 mph
-                    speedSum += self.getSpeed(dist_0, dist_1, angle_0, angle_1)
+                    speedSum += speed
                     count += 1
+                    
+            self.nearCarsSpeed[i].append(speed)
         
-        return speedSum / count
+        self.meanSpeed = speedSum / count
+        
     
-    def getStdevSpeed(self):
+    def updateStdevSpeed(self):
         mean = self.meanSpeed
         sumSqrd = 0
         count = 0
         
         for i in range(len(self.nearCarsAngle)-1):
-            dist_0 = self.nearCarsDist[i][self.time_index]
-            dist_1 = self.nearCarsDist[i+1][self.time_index]
-            if dist_0==0 or dist_1==0: 
-                break
-            else:
-                angle_0 = self.nearCarsAngle[i][self.time_index]
-                angle_1 = self.nearCarsAngle[i+1][self.time_index]
-                speed = self.getSpeed(dist_0, dist_1, angle_0, angle_1)
-                if speed > 8.9: # 20 mph  
-                    sumSqrd += (self.getSpeed(dist_0, dist_1, angle_0, angle_1))**2
+            speed = self.nearCarsSpeed[i][-1]
+            
+            if type(speed) == int:
+                if speed > 8.9: # 20 mph 
+                    sumSqrd += speed**2
                     count += 1
+                    
+        self.stdevSpeed = sumSqrd/count - mean**2
         
-        return sumSqrd/count - mean**2
-    
-    def load_car_Dist(self, csv_file):
-        base_flag = "LRR_RANGE_"
-        for i in range(64):
-            flag = base_flag + str(i)
-            self.nearCarsDist[i] = df[flag].values
-        return 
-    
-    def load_car_Angle(self, csv_file):
-        base_flag = "LRR_RANGE_"
-        for i in range(64):
-            flag = base_flag + str(i)
-            self.nearCarsAngle[i] = df[flag].values
-        return        
-    
+    def updateScores(self):
+        for carNbr in range(len(self.carsScore)):
+            speed = self.nearCarsSpeed[carNbr][-1]
+            score = self.scoreSpeed(speed)
+            
+            self.carsScore[carNbr].append(score)
+            
+                 
     def scoreSpeed(self, speed): 
+        if (speed == "NO"):
+            return "NO"
         if (speed <= self.meanSpeed + self.stdevSpeed):
             return 0
         if (speed <= self.meanSpeed + 2 * self.stdevSpeed):
@@ -96,8 +93,25 @@ class radarCar:
         if (speed <= self.meanSpeed + 3 *self.stdevSpeed):
             return 2
         return 3
+    
+    
+    def load_car_Dist(self, data_frame):
+        base_flag = "LRR_RANGE_"
+        for i in range(64):
+            flag = base_flag + str(i)
+            self.nearCarsDist[i] = data_frame[flag].values
+        return 
+    
+    
+    def load_car_Angle(self, data_frame):
+        base_flag = "LRR_RANGE_"
+        for i in range(64):
+            flag = base_flag + str(i)
+            self.nearCarsAngle[i] = data_frame[flag].values
+        return        
+    
+    
                 
-
 
 def getCarNbr(col_name):
     # 2 digits vs 1 digit
