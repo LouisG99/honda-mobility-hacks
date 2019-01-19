@@ -25,11 +25,12 @@ driveID = df['driveid'].values
 
 
 start_time = 0.0
-dt = 1e-6 # in s
+dt = 1 # in s
 radarCar = radarCarClass(start_time, dt)
 
 radarCar.load_car_Dist(df)
 radarCar.load_car_Angle(df)
+print()
 
 logtimes = df['logtime'].values
 CAN_speed = df['CAN_VEHICLE_SPEED'].values
@@ -56,7 +57,7 @@ for i in range(100):
     log_t = logtimes[i]
     
     radarCar.index = i
-    radarCar.dt = logtimes[i+1] - log_t
+    radarCar.dt = (logtimes[i+1] - log_t)*1e-6
     radarCar.time = (log_t - log0)*1e-6
     radarCar.speed = CAN_speed[i] / 3.6
     

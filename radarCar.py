@@ -18,17 +18,17 @@ class radarCarClass:
         self.speed = 0
         self.time = time
         self.dt = dt
-        self.nearCarsDist = [None * 64] # size 64
+        self.nearCarsDist = [None] * 64 # size 64
                 # should be array of array such that 
                 # index is like [obj_nbr][time_index]
-        self.nearCarsAngle = [None * 64]   # size 64
-        self.nearCarsSpeed = [ [None] * 64]  # size 64, each inner array size-1 of dist
-        self.carsScore = [ [None]* 64 ]   # size 64
+        self.nearCarsAngle = [None] * 64 # size 64
+        self.nearCarsSpeed = [ [None] ] * 64  # size 64, each inner array size-1 of dist
+        self.carsScore = [ [None]] * 64   # size 64
         self.meanSpeed = 0
         self.stdevSpeed = 0
         self.time_index = 0
         
-        print(len(self.nearCarsSpeed))
+        print(len(self.nearCarsSpeed), len(self.nearCarsDist))
         
         
     def getSpeed(self, dist1, dist2, angle1, angle2):
@@ -136,3 +136,4 @@ def getCarNbr(col_name):
 
 def yeet():
     print("yeet")
+    
