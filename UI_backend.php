@@ -31,7 +31,7 @@
 		<h1>Toyota is Better than Honda</h1>
 		<button type="button" onclick="loadDoc()">Refresh Location</button>
 
-		<p>Test status: <span id="demo"></span></p>
+		<p>Surrounding Vehicles <span id="demo"></span></p>
 
 		<!-- <script src="https://d3js.org/d3.v5.js"></script> -->
         <script src="https://d3js.org/d3.v5.js"></script>
@@ -64,6 +64,10 @@
 			    xhttp.open("GET", "getuser.php?q=", true);
 			    xhttp.send();
 			}
+
+			var refreshId = setInterval(function() {
+				loadDoc();
+		        }, 9000);
 
 			// alert("before d3");
 			// d3.text("test.csv", function(data) {
