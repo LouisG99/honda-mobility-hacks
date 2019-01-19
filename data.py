@@ -17,5 +17,7 @@ json_obj = json.loads(response.text)
 
 #print(json.dumps(json_obj, indent=4))
 
-with open('dev_2004_evtwarn.json', 'w') as outfile:
-    json.dump(json_obj, outfile)
+#with open('dev_2004_evtwarn.json', 'w') as outfile:
+#    json.dump(json_obj, outfile)
+
+print(json_obj['data'][0]['hvSpeed'])

@@ -1,0 +1,43 @@
+---
+title: "Honda Hackathon"
+author: "Utsav Lathia"
+date: "January 19, 2019"
+output: html_document
+---
+```{r}
+options("scipen"=100, "digits"=4)
+data = read.csv("ordered-data.csv", header = TRUE, sep =',', stringsAsFactors =FALSE)
+```
+
+```{r}
+#subset(data, data$driveid == 2.01811e+13)
+options("scipen"=100, "digits"=4)
+data[1,1]
+#20181121120215
+```
+
+```{r}
+#data[1,3]
+#test <- c("Recfile", "P3", "Edge")
+#subset(data, grepl(paste(test, collapse= "|"), data$Driver_Video))
+subset(data, data$Driver_video == "Recfile P3 Edge 20181121 082855 Webcam Driver Outputiplimage.m4v")
+#table(data$Driver_Video)
+```
+
+```{r}
+subset(data, data$Driver_video == 'Recfile P3 Edge 20181120 104743 Webcam Driver Outputiplimage.m4v')
+
+```
+```{r}
+vector
+for(i in 1:632863){
+  if (data[i, 3] == "Recfile P3 Edge 20181121 082855 Webcam Driver Outputiplimage.m4v"){
+    vector <- c(vector, i)
+  }
+}
+```
+
+```{r}
+data[c(vector),]
+```
+
