@@ -22,13 +22,15 @@ class radarCarClass:
                 # should be array of array such that 
                 # index is like [obj_nbr][time_index]
         self.nearCarsAngle = [None] * 64 # size 64
-        self.nearCarsSpeed = [ [None] ] * 64  # size 64, each inner array size-1 of dist
-        self.carsScore = [ [None]] * 64   # size 64
+#        self.nearCarsSpeed = [ [None] ] * 64  # size 64, each inner array size-1 of dist
+        self.nearCarsSpeed = [None] * 64
+#        self.carsScore = [ [None]] * 64   # size 64
+        self.carsScore = [None] * 64
         self.meanSpeed = 0
         self.stdevSpeed = 0
         self.time_index = 0
         
-        print(len(self.nearCarsSpeed), len(self.nearCarsDist))
+#        print(len(self.nearCarsSpeed), len(self.nearCarsDist))
         
         
     def getSpeed(self, dist1, dist2, angle1, angle2):
@@ -43,7 +45,7 @@ class radarCarClass:
     def updateAverageSpeed(self):
         speedSum = 0
         count = 0
-        for i in range(len(self.nearCarsAngle)-1):
+        for i in range(len(self.nearCarsAngle)):
             dist_0 = self.nearCarsDist[i][self.time_index]
             dist_1 = self.nearCarsDist[i][self.time_index+1]
             if dist_0==0 or dist_1==0: 
@@ -57,7 +59,8 @@ class radarCarClass:
                     speedSum += speed
                     count += 1
                     
-            self.nearCarsSpeed[i].append(speed)
+#            print(speed)
+            self.nearCarsSpeed[i] = speed
             
         if count==0:
             self.meanSpeed = -1
@@ -75,12 +78,11 @@ class radarCarClass:
         count = 0
         
         for i in range(len(self.nearCarsAngle)-1):
-            speed = self.nearCarsSpeed[i][-1]
+            speed = self.nearCarsSpeed[i]
             
-            if type(speed) == int:
-                if speed > 8.9: # 20 mph 
-                    sumSqrd += speed**2
-                    count += 1
+            if speed > 8.9: # 20 mph 
+                sumSqrd += speed**2
+                count += 1
                     
         if count==0: 
             self.stdevSpeed = -1
@@ -89,14 +91,14 @@ class radarCarClass:
         
     def updateScores(self):
         for carNbr in range(len(self.carsScore)):
-            speed = self.nearCarsSpeed[carNbr][-1]
+            speed = self.nearCarsSpeed[carNbr]
             score = self.scoreSpeed(speed)
             
-            self.carsScore[carNbr].append(score)
+            self.carsScore[carNbr] = score
             
                  
     def scoreSpeed(self, speed): 
-        if (speed == -1):
+        if (speed == -1 or self.meanSpeed == -1):
             return -1
         if (speed <= self.meanSpeed + self.stdevSpeed):
             return 0
