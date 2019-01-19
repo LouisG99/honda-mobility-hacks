@@ -16,16 +16,17 @@ from radarCar import *
 
 csvfile = pd.read_csv('../autonomous-data/ordered-data.csv', encoding='utf-8')
 
-csv2 = pd.read_csv('usable_data.csv', encoding='utf-8')
-df2 = pd.DataFrame(csv2)
+csv2 = pd.read_csv('usable_data.csv', encoding='utf-8', nrows=10000)
+df = pd.DataFrame(csv2)
 
 
-df = pd.DataFrame(csvfile)
+df2 = pd.DataFrame(csvfile)
 driveID = df['driveid'].values
+
 
 start_time = 0.0
 dt = 1e-6 # in s
-radarCar = radarCar(start_time, dt)
+radarCar = radarCarClass(start_time, dt)
 
 radarCar.load_car_Dist(df)
 radarCar.load_car_Angle(df)
@@ -35,6 +36,8 @@ CAN_speed = df['CAN_VEHICLE_SPEED'].values
 
 log0 = logtimes[0]
 
+outputFile = open('scoredData.csv', 'w')
+outputFile.close()
 
 #outputFile = open('scoredData.csv', 'a')
 #outWriter = csv.writer(outputFile, delimiter=',', 
@@ -45,16 +48,21 @@ log0 = logtimes[0]
 #outWriter.writerow(['John Smith', 'yeet'])
 
 
-for i in range(len(logtimes)-1):
+#for i in range(len(logtimes)-1):
+for i in range(100):
+
+    if (i%1000==0): 
+        print(i)
     log_t = logtimes[i]
     
     radarCar.index = i
-    radarCar.dt = log_t - logtimes[i+1]
-    radarCar.time = log_t - log0
-    radarCar.speed = CAN_speed[i]
+    radarCar.dt = logtimes[i+1] - log_t
+    radarCar.time = (log_t - log0)*1e-6
+    radarCar.speed = CAN_speed[i] / 3.6
     
     radarCar.updateAverageSpeed()
     radarCar.updateStdevSpeed()
+    radarCar.updateScores()
     
     
     # Writing into output
@@ -62,14 +70,20 @@ for i in range(len(logtimes)-1):
     outWriter = csv.writer(outputFile, delimiter=',', 
                        quotechar='"')
     total_cars = 64
-    for carNbr in range(len(total_cars)):
+    print(len(radarCar.nearCarsSpeed[1]), len(radarCar.nearCarsSpeed[18]))
+    
+    for carNbr in range(total_cars):
         score = radarCar.carsScore[carNbr][-1]
         speed = radarCar.nearCarsSpeed[carNbr][-1]
         avrg_speed = radarCar.meanSpeed
-        outWriter.writerow([str(log_t), str(carNbr), str(speed), str(score), 
-                            str(avrg_speed)])
+        if speed>0:
+            outWriter.writerow([str(log_t), str(carNbr), str(speed*3.6), str(score), 
+                                str(avrg_speed*3.6)])
+    
     outputFile.close()
 #    time.sleep(1.5)
-    
-    
+
+speedCar = radarCar.nearCarsSpeed[4][:1000]
+
+dist = df['LRR_RANGE_4'].values
     

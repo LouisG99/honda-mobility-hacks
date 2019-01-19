@@ -13,25 +13,27 @@ class closeCar:
         self.angle = angle
         
 
-class radarCar:
+class radarCarClass:
     def __init__(self, time, dt):
         self.speed = 0
         self.time = time
         self.dt = dt
-        self.nearCarsDist = [None] * 64 # size 64
+        self.nearCarsDist = [None * 64] # size 64
                 # should be array of array such that 
                 # index is like [obj_nbr][time_index]
-        self.nearCarsAngle = [None] * 64  # size 64
-        self.nearCarsSpeed = [ [None] ] * 64  # size 64, each inner array size-1 of dist
-        self.carsScore = [ [None] ] * 64  # size 64
+        self.nearCarsAngle = [None * 64]   # size 64
+        self.nearCarsSpeed = [ [None] * 64]  # size 64, each inner array size-1 of dist
+        self.carsScore = [ [None]* 64 ]   # size 64
         self.meanSpeed = 0
         self.stdevSpeed = 0
-        self.time_Index = 0
+        self.time_index = 0
+        
+        print(len(self.nearCarsSpeed))
         
         
     def getSpeed(self, dist1, dist2, angle1, angle2):
-        horiz_d = math.cos(angle1)*dist1 - math.cos(angle2)*dist2
-        vertical_d = math.sin(angle1)*dist1 - math.sin(angle2)*dist2
+        horiz_d = math.sin(angle1)*dist1 - math.sin(angle2)*dist2
+        vertical_d = math.cos(angle1)*dist1 - math.cos(angle2)*dist2
         vertical_d += self.speed * self.dt
         
         total_d = (horiz_d**2 + vertical_d**2)**0.5
@@ -45,7 +47,7 @@ class radarCar:
             dist_0 = self.nearCarsDist[i][self.time_index]
             dist_1 = self.nearCarsDist[i][self.time_index+1]
             if dist_0==0 or dist_1==0: 
-                speed = "NO"
+                speed = -1
             else:
                 angle_0 = self.nearCarsAngle[i][self.time_index]
                 angle_1 = self.nearCarsAngle[i][self.time_index+1]
@@ -56,12 +58,19 @@ class radarCar:
                     count += 1
                     
             self.nearCarsSpeed[i].append(speed)
-        
-        self.meanSpeed = speedSum / count
+            
+        if count==0:
+            self.meanSpeed = -1
+        else:
+            self.meanSpeed = speedSum / count
         
     
     def updateStdevSpeed(self):
         mean = self.meanSpeed
+        if mean==-1:
+            self.stdevSpeed = -1
+            return
+        
         sumSqrd = 0
         count = 0
         
@@ -73,6 +82,9 @@ class radarCar:
                     sumSqrd += speed**2
                     count += 1
                     
+        if count==0: 
+            self.stdevSpeed = -1
+            return
         self.stdevSpeed = sumSqrd/count - mean**2
         
     def updateScores(self):
@@ -84,8 +96,8 @@ class radarCar:
             
                  
     def scoreSpeed(self, speed): 
-        if (speed == "NO"):
-            return "NO"
+        if (speed == -1):
+            return -1
         if (speed <= self.meanSpeed + self.stdevSpeed):
             return 0
         if (speed <= self.meanSpeed + 2 * self.stdevSpeed):
@@ -104,7 +116,7 @@ class radarCar:
     
     
     def load_car_Angle(self, data_frame):
-        base_flag = "LRR_RANGE_"
+        base_flag = "LRR_ANGLE_"
         for i in range(64):
             flag = base_flag + str(i)
             self.nearCarsAngle[i] = data_frame[flag].values
