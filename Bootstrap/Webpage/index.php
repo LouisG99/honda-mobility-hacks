@@ -21,6 +21,9 @@
     <!-- Custom CSS -->
     <link href="css/stylish-portfolio.min.css" rel="stylesheet">
 
+    <!--AJAX -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
   </head>
 
   <body id="page-top">
@@ -99,7 +102,7 @@
                       <h4>
                           <strong>Recent</strong>
                       </h4>
-                      <p class="text-faded mb-0">Live-time updates around you.</p>
+                      <p class="text-faded mb-0">Real-time updates around you.</p>
                   </div>
                   <div class="col-lg-3 col-md-6 mb-5 mb-md-0">
                       <span class="service-icon rounded-circle mx-auto mb-3">
@@ -126,7 +129,7 @@
           </div>
       </section>
       <!-- Callout -->
-      <section class="callout">
+     <!--  <section class="callout">
           <div class="container text-center">
               <h2 class="mx-auto mb-5">
                   Welcome to
@@ -135,16 +138,48 @@
               </h2>
               <a class="btn btn-primary btn-xl" href="https://startbootstrap.com/template-overviews/stylish-portfolio/">Download Now!</a>
           </div>
-      </section>
+      </section> -->
       <!-- Portfolio -->
       <section class="content-section" id="portfolio">
           <div class="container">
               <div class="content-section-heading text-center">
-                  <h3 class="text-secondary mb-0">Portfolio</h3>
-                  <h2 class="mb-5">Recent Projects</h2>
+                  <h3 class="text-secondary mb-0">Demo using real-time data</h3>
+                  <h2 class="mb-5">Try It Out</h2>
               </div>
-              <button style="margin-left:auto; margin-right: auto;" type="button">Click Me!</button>
-              <div class="row no-gutters">
+              <button type="button" onClick="document.location.href='UI_backend.php'">Start Demo</button>
+
+             <!--  <script type="text/javascript"charset="utf-8">
+    
+                function loadDoc() {
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function() {
+                      /*  Holds the status of the XMLHttpRequest.
+                    0: request not initialized 
+                    1: server connection established
+                    2: request received 
+                    3: processing request 
+                    4: request finished and response is ready
+                    */
+                      if (this.readyState == 4) {
+                        if (this.status == 200) {
+                          document.getElementById("demo").innerHTML = this.responseText;
+                        }
+                        else {
+                          alert(this.status + " error");
+                        }
+                      }
+                    };
+                    xhttp.open("GET", "gettabledata.php?q=", true);
+                    xhttp.send();
+                }
+
+                // var refreshId = setInterval(function() {
+                //   loadDoc();
+                //       }, 2000);
+              </script> -->
+
+              <!-- <button style="margin-left:auto; margin-right: auto;" type="button">Click Me!</button> -->
+              <!-- <div class="row no-gutters">
                   <div class="col-lg-6">
                       <a class="portfolio-item" href="#">
                           <span class="caption">
@@ -189,7 +224,7 @@
                           <img class="img-fluid" src="img/portfolio-4.jpg" alt="">
                       </a>
                   </div>
-              </div>
+              </div> -->
           </div>
       </section>
       <!-- Call to Action -->
