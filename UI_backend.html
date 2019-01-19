@@ -14,32 +14,64 @@
 		
 	</head>
 	<body>
+
+		<div>
+			
+		</div>
+		<h1>The XMLHttpRequest Object</h1>
+		<button type="button" onclick="loadDoc()">Change Content</button>
+
+		<p>Test status: <span id="demo"></span></p>
+
 		<script>
+			
+
 			function loadDoc() {
 			    var xhttp = new XMLHttpRequest();
 			    xhttp.onreadystatechange = function() {
-			      if (this.readyState == 4 && this.status == 200) {
-			       document.getElementById("demo").innerHTML = this.responseText;
-			      }
+			    	/*	Holds the status of the XMLHttpRequest.
+					0: request not initialized 
+					1: server connection established
+					2: request received 
+					3: processing request 
+					4: request finished and response is ready
+					*/
+			    	if (this.readyState == 4) {
+			    		if (this.status == 200) {
+
+				    		document.getElementById("demo").innerHTML = this.responseText;
+				    	}
+				    	else {
+				    		alert(this.status + " error");
+				    	}
+			    	}
+			    	// else {
+			    		
+			    	// 	alert("fail");
+			    	// }
 			    };
-			    xhttp.open("GET", "ajax_info.txt", true);
+			    xhttp.open("GET", "demo.txt", true);
 			    xhttp.send();
 			}
 
 			function refresh() {
 			    // make Ajax call here, inside the callback call:
-			    //loadDoc()
+			    loadDoc();
 
-			    setTimeout(refresh, 10);
+
+			    setTimeout(refresh, 600);
 
 			    
 			    // ...
 			}
 
-			// initial call, or just call refresh directly
-			setTimeout(refresh, 10);
+			// // initial call, or just call refresh directly
+			setTimeout(refresh, 600);
 
 		</script>
 
+
 	</body>
+
 </html>
+
