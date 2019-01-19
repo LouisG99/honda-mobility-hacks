@@ -49,7 +49,9 @@
 					3: processing request 
 					4: request finished and response is ready
 					*/
+					//alertthis.status;
 			    	if (this.readyState == 4) {
+			    	//	echo this.status;
 			    		if (this.status == 200) {
 				    		document.getElementById("demo").innerHTML = this.responseText;
 				    	}
@@ -58,13 +60,14 @@
 				    	}
 			    	}
 			    };
+			   // echo this.status;
 			    xhttp.open("GET", "gettabledata.php?q=", true);
 			    xhttp.send();
 			}
 
 			var refreshId = setInterval(function() {
 				loadDoc();
-		        }, 2000);
+		        }, 4000);
 
 
 		</script>
