@@ -28,8 +28,8 @@
 	<body>
 
 
-		<h1>Toyota is Better than Honda</h1>
-		<button type="button" onclick="loadDoc()">Refresh Location</button>
+		<h1>Car Data Demo</h1>
+		<button type="button" onclick="loadDoc()">Start Demo</button>
 
 		<p>Surrounding Vehicles <span id="demo"></span></p>
 
@@ -56,51 +56,15 @@
 				    		alert(this.status + " error");
 				    	}
 			    	}
-			    	// else {
-			    		
-			    	// 	alert("fail");
-			    	// }
 			    };
-			    xhttp.open("GET", "getuser.php?q=", true);
+			    xhttp.open("GET", "gettabledata.php?q=", true);
 			    xhttp.send();
 			}
 
 			var refreshId = setInterval(function() {
 				loadDoc();
-		        }, 9000);
+		        }, 2000);
 
-			// alert("before d3");
-			// d3.text("test.csv", function(data) {
-   //              var parsedCSV = d3.csv.parseRows(data);
-   //              alert("success");
-
-   //              var container = d3.select("body")
-   //                  .append("table")
-
-   //                  .selectAll("tr")
-   //                      .data(parsedCSV).enter()
-   //                      .append("tr")
-
-   //                  .selectAll("td")
-   //                      .data(function(d) { return d; }).enter()
-   //                      .append("td")
-   //                      .text(function(d) { return d; });
-   //          });
-
-
-			// function refresh() {
-			//     // make Ajax call here, inside the callback call:
-			//     loadDoc();
-			//     //alert("refresh");
-
-			//     setTimeout(refresh, 10);
-
-			    
-			//     // ...
-			// }
-
-			// // initial call, or just call refresh directly
-			//setTimeout(refresh, 10);
 
 		</script>
 
