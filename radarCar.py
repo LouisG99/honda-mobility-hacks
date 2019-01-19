@@ -16,7 +16,7 @@ class closeCar:
 class radarCar:
     def __init__(self, time, dt):
         self.speed = 0
-        self.time = time
+#        self.time = time
         self.dt = dt
         self.nearCarsDist = [None] * 64 # size 64
                 # should be array of array such that 
